@@ -10,6 +10,6 @@ final class ImagesListCell: UITableViewCell {
     @IBOutlet weak var dateLabel: UILabel!
     
     @IBOutlet weak var tableImage: UIImageView!
-    
+
     static let reuseIdentifier = "ImageListCell"
 }
