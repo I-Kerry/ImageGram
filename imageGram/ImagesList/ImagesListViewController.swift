@@ -32,7 +32,6 @@ class ImagesListViewController: UIViewController {
             }
             
             let image = UIImage(named: photosName[indexPath.row])
-//            _ = viewController.view
             viewController.image = image
         } else {
             super.prepare(for: segue, sender: sender)

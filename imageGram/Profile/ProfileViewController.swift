@@ -1,44 +1,74 @@
 import UIKit
 
 final class ProfileViewController: UIViewController {
+    private var imageView: UIImageView!
+    private var nameLabel: UILabel!
+    private var loginName: UILabel!
+    private var discription: UILabel!
+    private var logoutButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupImageView()
+        setupNameLabel()
+        setupLoginName()
+        setupDiscription()
+        setupLogoutButton()
+        setupConstraints()
+        
+    }
+    
+    @objc
+    private func tapLogoutButton() {
+    }
+    
+    private func setupImageView() {
         let profileimage = UIImage(named: "image_photo")
-        let imageView = UIImageView(image: profileimage)
+        imageView = UIImageView(image: profileimage)
         view.addSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.tintColor = .ypBlack
         imageView.layer.masksToBounds = true
         imageView.layer.cornerRadius = 35
         
-        let nameLabel = UILabel()
+    }
+    
+    private func setupNameLabel() {
+        nameLabel = UILabel()
         nameLabel.text = "Екатерина Новикова"
         view.addSubview(nameLabel)
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.font = UIFont.systemFont(ofSize: 23, weight: .semibold)
         nameLabel.textColor = .white
-        
-        let loginName = UILabel()
+    }
+    
+    private func setupLoginName() {
+        loginName = UILabel()
         loginName.text = "@ekaterina_nov"
         view.addSubview(loginName)
         loginName.translatesAutoresizingMaskIntoConstraints = false
         loginName.textColor = .ypGrayLoginName
         loginName.font = UIFont.systemFont(ofSize: 13)
-        
-        let discription = UILabel()
+    }
+    
+    private func setupDiscription() {
+        discription = UILabel()
         discription.text = "Hello, world!"
         view.addSubview(discription)
         discription.translatesAutoresizingMaskIntoConstraints = false
         discription.textColor = .white
         discription.font = UIFont.systemFont(ofSize: 13)
-        
-        let logoutButton = UIButton.systemButton(with: UIImage(systemName: "ipad.and.arrow.forward")!, target: self, action: #selector(self.tapLogoutButton))
+    }
+    
+    private func setupLogoutButton() {
+        logoutButton = UIButton.systemButton(with: UIImage(systemName: "ipad.and.arrow.forward")!, target: self, action: #selector(self.tapLogoutButton))
         logoutButton.tintColor = .ypRed
         view.addSubview(logoutButton)
         logoutButton.translatesAutoresizingMaskIntoConstraints = false
-        
+    }
+    
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
             imageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
@@ -55,9 +85,5 @@ final class ProfileViewController: UIViewController {
             imageView.widthAnchor.constraint(equalToConstant: 70),
             imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor)
         ])
-    }
-    
-    @objc
-    private func tapLogoutButton() {
     }
 }

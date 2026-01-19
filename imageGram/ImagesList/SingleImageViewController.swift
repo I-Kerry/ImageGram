@@ -1,6 +1,11 @@
 import UIKit
 
 final class SingleImageViewController: UIViewController {
+    private enum Constants {
+        static let minZoomScale = 0.1
+        static let maxZoomScale = 1.25
+    }
+    
     var image: UIImage? {
         didSet {
             guard isViewLoaded, let image else { return }
@@ -17,8 +22,8 @@ final class SingleImageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        scrollView.minimumZoomScale = 0.1
-        scrollView.maximumZoomScale = 1.25
+        scrollView.minimumZoomScale = Constants.minZoomScale
+        scrollView.maximumZoomScale = Constants.maxZoomScale
         
         guard let image else { return }
         imageView.image = image
@@ -35,6 +40,7 @@ final class SingleImageViewController: UIViewController {
         view.layoutIfNeeded()
         let visibleRectSize = scrollView.bounds.size
         let imageSize = image.size
+        guard imageSize.width > 0, imageSize.height > 0  else { return }
         let hScale = visibleRectSize.width / imageSize.width
         let vScale = visibleRectSize.height / imageSize.height
         let scale = min(maxZoomScale, max(minZoomScale, min(hScale, vScale)))
