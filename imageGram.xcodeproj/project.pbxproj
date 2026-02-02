@@ -6,12 +6,17 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		35F4B79D2F24CE5B00F123E5 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35F4B79C2F24CE5B00F123E5 /* WebKit.framework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		356B75DF2EFD3E1900F778C0 /* imageGram.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = imageGram.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		35F4B79C2F24CE5B00F123E5 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		356B75F12EFD3E1A00F778C0 /* Exceptions for "imageGram" folder in "imageGram" target */ = {
+		355FF77D2F308401004E1C36 /* Exceptions for "imageGram" folder in "imageGram" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -21,10 +26,10 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		356B75E12EFD3E1900F778C0 /* imageGram */ = {
+		355FF76B2F308401004E1C36 /* imageGram */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				356B75F12EFD3E1A00F778C0 /* Exceptions for "imageGram" folder in "imageGram" target */,
+				355FF77D2F308401004E1C36 /* Exceptions for "imageGram" folder in "imageGram" target */,
 			);
 			path = imageGram;
 			sourceTree = "<group>";
@@ -36,6 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				35F4B79D2F24CE5B00F123E5 /* WebKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -45,7 +51,8 @@
 		356B75D62EFD3E1900F778C0 = {
 			isa = PBXGroup;
 			children = (
-				356B75E12EFD3E1900F778C0 /* imageGram */,
+				355FF76B2F308401004E1C36 /* imageGram */,
+				35F4B79B2F24CE5B00F123E5 /* Frameworks */,
 				356B75E02EFD3E1900F778C0 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -56,6 +63,14 @@
 				356B75DF2EFD3E1900F778C0 /* imageGram.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		35F4B79B2F24CE5B00F123E5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				35F4B79C2F24CE5B00F123E5 /* WebKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -74,7 +89,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				356B75E12EFD3E1900F778C0 /* imageGram */,
+				355FF76B2F308401004E1C36 /* imageGram */,
 			);
 			name = imageGram;
 			packageProductDependencies = (
