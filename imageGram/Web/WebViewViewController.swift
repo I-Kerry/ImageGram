@@ -1,12 +1,10 @@
 
-
-import Foundation
 import UIKit
 import WebKit
 
 enum WebViewCOnstants {
-        static let unsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
-    }
+    static let unsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
+}
 
 protocol WebViewControllerDelegate: AnyObject {
     
@@ -15,7 +13,7 @@ protocol WebViewControllerDelegate: AnyObject {
     func webViewViewControllerDidCancel(_ vc: WebViewViewController)
 }
 
-class WebViewViewController: UIViewController {
+final class WebViewViewController: UIViewController {
     
     @IBOutlet private var webView: WKWebView!
     

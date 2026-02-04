@@ -1,6 +1,3 @@
-
-
-import Foundation
 import UIKit
 
 protocol AuthViewControllerDelegate: AnyObject {
@@ -10,7 +7,7 @@ protocol AuthViewControllerDelegate: AnyObject {
 final class AuthViewController: UIViewController, WebViewControllerDelegate {
     
     weak var delegate: AuthViewControllerDelegate?
-        
+    
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
         vc.dismiss(animated: true)
         
@@ -50,9 +47,9 @@ final class AuthViewController: UIViewController, WebViewControllerDelegate {
     }
     
     func configureBackButton() {
-        navigationController?.navigationBar.backIndicatorImage = UIImage(named: "nav_back_button")
-        navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(named: "nav_back_button")
+        navigationController?.navigationBar.backIndicatorImage = UIImage(resource: .navBackButton)
+        navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(resource: .navBackButton)
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        navigationItem.backBarButtonItem?.tintColor = UIColor(named: "YP Black")
+        navigationItem.backBarButtonItem?.tintColor = UIColor(resource: .ypBlack)
     }
 }
