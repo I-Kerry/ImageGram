@@ -52,7 +52,7 @@ extension SplashViewController: AuthViewControllerDelegate {
         vc.dismiss(animated: true) { [weak self] in
             guard let self,
                   let token = self.storage.token else { return }
-            self.fetchProfile(token: token)
+//            self.fetchProfile(token: token)
         }
         
 //        guard let token = storage.token else { return }

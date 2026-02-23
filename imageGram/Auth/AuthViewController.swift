@@ -10,7 +10,7 @@ final class AuthViewController: UIViewController, WebViewControllerDelegate {
     weak var delegate: AuthViewControllerDelegate?
     
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
-        vc.dismiss(animated: true)
+//        vc.dismiss(animated: true)
         
         UIBlockingProgressHUD.show()
         
@@ -23,7 +23,7 @@ final class AuthViewController: UIViewController, WebViewControllerDelegate {
             case .success:
                 self.delegate?.didAuthenticate(self)
             case .failure(let error):
-                print("Authentication error")
+                print("Authentication error \(error)")
                 //TODO: eto dal'she dodelat' nado
                 self.showAlert()
 //                break

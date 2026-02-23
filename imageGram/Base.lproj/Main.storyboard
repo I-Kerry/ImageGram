@@ -150,22 +150,6 @@
             </objects>
             <point key="canvasLocation" x="2127.4809160305344" y="-407.04225352112678"/>
         </scene>
-        <!--Profile-->
-        <scene sceneID="KtT-PF-af6">
-            <objects>
-                <viewController storyboardIdentifier="ProfileViewController" title="Profile" id="tFX-yA-dEz" customClass="ProfileViewController" customModule="imageGram" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="p6G-GS-aHL">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="dHL-rM-5cB"/>
-                        <color key="backgroundColor" red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="" image="tab_profile_active" id="RP2-3j-9xe"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="IR3-tn-DUA" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-118" y="522"/>
-        </scene>
         <!--Splash View Controller-->
         <scene sceneID="NJY-uf-o66">
             <objects>
@@ -354,7 +338,6 @@
         <image name="backButton" width="24" height="24"/>
         <image name="button active" width="44" height="44"/>
         <image name="tab_editorial_active" width="30" height="30"/>
-        <image name="tab_profile_active" width="30" height="30"/>
         <namedColor name="YP Black">
             <color red="0.10199999809265137" green="0.10599999874830246" blue="0.13300000131130219" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

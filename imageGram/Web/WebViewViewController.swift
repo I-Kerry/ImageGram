@@ -84,7 +84,7 @@ extension WebViewViewController: WKNavigationDelegate {
             delegate?.webViewViewController(self, didAuthenticateWithCode: code)
             //TODO: process code
             decisionHandler(.cancel)
-            dismiss(animated: true)
+//            dismiss(animated: true)
         } else {
             decisionHandler(.allow)
         }

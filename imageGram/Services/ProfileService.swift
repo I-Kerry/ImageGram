@@ -12,7 +12,7 @@ struct Profile {
 struct ProfileResult: Codable {
     let username: String
     let firstName: String
-    let lastName: String
+    let lastName: String?
     let bio: String?
     
     private enum CodingKeys: String, CodingKey {
@@ -50,7 +50,8 @@ final class ProfileService {
             case .success(let profileResult):
 //                do {
 //                    let profileResult = try JSONDecoder().decode(ProfileResult.self,from: data)
-                    let profile = Profile(username: profileResult.username, name: profileResult.firstName + " " + profileResult.lastName, loginName: "@\(profileResult.username)", bio: profileResult.bio)
+                guard let lastName = profileResult.lastName else { return }
+                let profile = Profile(username: profileResult.username, name: profileResult.firstName + " " + lastName/*profileResult.lastName*/, loginName: "@\(profileResult.username)", bio: profileResult.bio)
                     self.profile = profile
                     completion(.success(profile))
                     

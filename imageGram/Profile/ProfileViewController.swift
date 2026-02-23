@@ -66,6 +66,8 @@ final class ProfileViewController: UIViewController {
         setupLogoutButton()
         setupConstraints()
         
+        view.backgroundColor = .ypBlack
+        
         profileImageServiceObserver = NotificationCenter.default.addObserver(
             forName: ProfileImageService.didChangeNotification,
             object: nil,
