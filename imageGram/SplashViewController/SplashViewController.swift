@@ -3,9 +3,19 @@ import UIKit
 
 final class SplashViewController: UIViewController {
     
+    private var imageView: UIImageView!
+    
     private let storage = OAuth2TokenStorage.shared
     private let segueIdentifier = "ShowAuthenticationScreen"
     private let profileService = ProfileService.shared
+    private let authViewController = AuthViewController()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .ypBlack
+        
+        authViewController.delegate = self
+    }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -14,7 +24,8 @@ final class SplashViewController: UIViewController {
 //            switchToTabBarController()
             fetchProfile(token: token)
         } else {
-            performSegue(withIdentifier: segueIdentifier, sender: nil)
+            setupAuthViewController()
+//            performSegue(withIdentifier: segueIdentifier, sender: nil)
         }
     }
     
@@ -28,31 +39,31 @@ final class SplashViewController: UIViewController {
     }
 }
 
-extension SplashViewController {
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == segueIdentifier {
-            guard
-                let navigationController = segue.destination as? UINavigationController,
-                let viewController = navigationController.viewControllers.first as? AuthViewController
-            else {
-                
-                assertionFailure("Failed to prepare for \(segueIdentifier)")
-                return
-            }
-            
-            viewController.delegate = self
-        } else {
-            super.prepare(for: segue, sender: sender)
-        }
-    }
-}
+//extension SplashViewController {
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if segue.identifier == segueIdentifier {
+//            guard
+//                let navigationController = segue.destination as? UINavigationController,
+//                let viewController = navigationController.viewControllers.first as? AuthViewController
+//            else {
+//                
+//                assertionFailure("Failed to prepare for \(segueIdentifier)")
+//                return
+//            }
+//            
+//            viewController.delegate = self
+//        } else {
+//            super.prepare(for: segue, sender: sender)
+//        }
+//    }
+//}
 
 extension SplashViewController: AuthViewControllerDelegate {
     func didAuthenticate(_ vc: AuthViewController) {
         vc.dismiss(animated: true) { [weak self] in
             guard let self,
                   let token = self.storage.token else { return }
-//            self.fetchProfile(token: token)
+            self.fetchProfile(token: token)
         }
         
 //        guard let token = storage.token else { return }
@@ -78,5 +89,26 @@ extension SplashViewController: AuthViewControllerDelegate {
                 break
             }
         }
+    }
+}
+
+extension SplashViewController {
+    private func setupImageView() {
+        let logo = UIImage(named: "Vector")
+        imageView = UIImageView(image: logo)
+        view.addSubview(imageView)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+    }
+    
+    private func setupAuthViewController() {
+        let storyboard = UIStoryboard(name: "Main", bundle: .main)
+        guard let authViewController = storyboard.instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else { return }
+        authViewController.delegate = self
+        authViewController.modalPresentationStyle = .fullScreen
+        present(authViewController, animated: true)
     }
 }
