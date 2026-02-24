@@ -12,6 +12,8 @@ final class SplashViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        setupImageView()
         view.backgroundColor = .ypBlack
         
         authViewController.delegate = self
@@ -69,8 +71,9 @@ extension SplashViewController {
     private func setupImageView() {
         let logo = UIImage(named: "Vector")
         imageView = UIImageView(image: logo)
-        view.addSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(imageView)
+        
         NSLayoutConstraint.activate([
             imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
