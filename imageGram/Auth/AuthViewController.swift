@@ -9,8 +9,14 @@ final class AuthViewController: UIViewController, WebViewControllerDelegate {
     
     weak var delegate: AuthViewControllerDelegate?
     
+    private let segueIdentifier = "ShowWebView"
+    
+    override func viewDidLoad() {
+            configureBackButton()
+        }
+
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
-//        vc.dismiss(animated: true)
+        //        vc.dismiss(animated: true)
         
         UIBlockingProgressHUD.show()
         
@@ -24,9 +30,7 @@ final class AuthViewController: UIViewController, WebViewControllerDelegate {
                 self.delegate?.didAuthenticate(self)
             case .failure(let error):
                 print("Authentication error \(error)")
-                //TODO: eto dal'she dodelat' nado
                 self.showAlert()
-//                break
             }
         }
     }
@@ -49,11 +53,9 @@ final class AuthViewController: UIViewController, WebViewControllerDelegate {
         }
     }
     
-    private let segueIdentifier = "ShowWebView"
     
-    override func viewDidLoad() {
-        configureBackButton()
-    }
+    
+    
     
     func configureBackButton() {
         navigationController?.navigationBar.backIndicatorImage = UIImage(resource: .navBackButton)

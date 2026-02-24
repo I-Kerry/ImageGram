@@ -3,49 +3,6 @@ import Kingfisher
 
 final class ProfileViewController: UIViewController {
     
-//    override init(nibName: String?, bundle: Bundle?) {
-//        super .init(nibName: nibName, bundle: bundle)
-//        addObserver()
-//    }
-//    
-//    required init?(coder: NSCoder) {
-//        super .init(coder: coder)
-//        addObserver()
-//    }
-//    
-//    deinit {
-//        removeObserver()
-//    }
-//    
-//    private func addObserver() {
-//        NotificationCenter.default.addObserver(
-//            self,
-//            selector: #selector(updateAvatar(notification:)),
-//            name: ProfileImageService.didChangeNotification,
-//            object: nil)
-//    }
-//    
-//    private func removeObserver() {
-//        NotificationCenter.default.removeObserver(
-//            self,
-//            name: ProfileImageService.didChangeNotification,
-//            object: nil)
-//    }
-//    
-//    @objc
-//    private func updateAvatar(notification: Notification) {
-//        guard
-//            isViewLoaded,
-//            let userInfo = notification.userInfo,
-//            let profileImageURL = userInfo["URL"] as? String,
-//            let url = URL(string: profileImageURL)
-//        else { return }
-//        
-//        // TODO vot zdes kingfisher budet
-//    } это первый способ со старым
-    
-    
-    
     private var profileImageServiceObserver: NSObjectProtocol?
     
     private var imageView: UIImageView!
@@ -78,35 +35,11 @@ final class ProfileViewController: UIViewController {
         
         updateAvatar()
         
-//        if let avatarURL = ProfileImageService.shared.avatarURL,
-//           let url = URL(string: avatarURL) {
-//            
-//        } старый способ
-        
-        // TODO [Sprint 11]  Обновите аватар, если нотификация
-                            // была опубликована до того, как мы подписались.
-
         if let profile = profileService.profile {
             updateProfile(profile: profile)
             ProfileImageService.shared.fetchProfileImageURL(username: profile.username) { _ in
             }
         }
-        
-        
-//        guard let token = OAuth2TokenStorage.shared.token else {
-//            assertionFailure("Token is wrong")
-//            return
-//        }
-//        profile.fetchProfile("\(token)") { result in
-//            switch result {
-//            case .success(let profile):
-//                self.updateProfile(profile: profile)
-//            case .failure(let error):
-//                assertionFailure("\(error)")
-//            }
-//
-//        }
-
     }
     
     @objc
@@ -189,8 +122,6 @@ final class ProfileViewController: UIViewController {
             let profileImageURL = ProfileImageService.shared.avatarURL,
             let imageUrl = URL(string: profileImageURL)
         else { return }
-        // TODO A v novom metode zdes nuzhno budet zakinut obnovlenie s kingfishera
-        
         
         let placeholder = UIImage(systemName: "person.crop.circle.fill")?.withTintColor(.lightGray, renderingMode: .alwaysOriginal).withConfiguration(UIImage.SymbolConfiguration(pointSize: 70, weight: .regular, scale: .large))
         

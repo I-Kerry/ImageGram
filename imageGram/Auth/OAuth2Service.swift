@@ -1,5 +1,4 @@
 
-
 import Foundation
 
 enum AuthServiceError: Error {
@@ -29,15 +28,12 @@ final class OAuth2Service {
             print("Bad Request: Error 400")
             return
         }
-        //        self.task = fetch(request: request) { [weak self] result in
-        //            guard let self else { return }
+        
         self.task = urlSession.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
             guard let self else { return }
             DispatchQueue.main.async {
                 switch result {
                 case .success(let response):
-                    //                    do {
-                    //                        let response = try JSONDecoder().decode(OAuthTokenResponseBody.self, from: data)
                     let token = response.accessToken
                     guard !token.isEmpty else {
                         print("An empty token is received")
@@ -48,11 +44,6 @@ final class OAuth2Service {
                     DispatchQueue.main.async {
                         completion(.success(token))
                     }
-                    
-                    //                    } catch {
-                    //                        print(String(data: data, encoding: .utf8))
-                    //                        completion(.failure(error))
-                    //                    }
                 case .failure(let error):
                     print("Network Error: \(error.localizedDescription)")
                     completion(.failure(error))
@@ -62,12 +53,6 @@ final class OAuth2Service {
             }
         }
     }
-        
-//        guard let request = makeOAuthTokenRequest(code: code) else {
-//            print("OAuth2Service: failed to create token request")
-//            completion(.failure(NetworkError.invalidRequest))
-//            return
-//        }
     
     private func makeOAuthTokenRequest(code: String) -> URLRequest? {
         guard var urlComponents = URLComponents(string: "https://unsplash.com/oauth/token") else {
@@ -92,13 +77,4 @@ final class OAuth2Service {
         
         return urlRequest
     }
-    
-//    private func fetch(request: URLRequest, handler: @escaping (Result<Data, Error>) -> Void) -> URLSessionTask {
-//        
-//        let task = URLSession.shared.data(for: request) { result in
-//            handler(result)
-//        }
-//        task.resume()
-//        return task
-//    }
 }

@@ -40,23 +40,16 @@ final class ProfileImageService {
             print("Bad Request: Error 400")
             return
         }
-        
-//        let newTask = urlSession.data(for: request) { [weak self] result in
         let newTask = urlSession.objectTask(for: request) { [weak self] (result: Result<UserResult, Error>) in
             guard let self else { return }
             switch result {
             case .success(let userResult):
-//                do {
-//                    let userResult = try JSONDecoder().decode(UserResult.self, from: data)
-                    self.avatarURL = userResult.profileImage.small
-                    completion(.success(userResult.profileImage.small))
-                    NotificationCenter.default.post(
-                        name: ProfileImageService.didChangeNotification,
-                        object: self,
-                        userInfo: ["URL": userResult.profileImage.small])
-//                } catch {
-//                    assertionFailure("failed")
-//                }
+                self.avatarURL = userResult.profileImage.small
+                completion(.success(userResult.profileImage.small))
+                NotificationCenter.default.post(
+                    name: ProfileImageService.didChangeNotification,
+                    object: self,
+                    userInfo: ["URL": userResult.profileImage.small])
             case .failure(let error):
                 assertionFailure("Request error \(error.localizedDescription)")
                 completion(.failure(error))
@@ -64,7 +57,7 @@ final class ProfileImageService {
             self.task = nil
         }
         self.task = newTask
-//        newTask.resume()
+        //        newTask.resume()
     }
     private func makeProfileImageRequest(username: String, token: String) -> URLRequest? {
         guard let url = URL(string: "https://api.unsplash.com/users/\(username)") else { return nil }

@@ -28,7 +28,7 @@ final class ProfileService {
     static let shared = ProfileService()
     private var task: URLSessionTask?
     private var urlSession = URLSession.shared
-//    private var token = OAuth2TokenStorage.shared.token
+    //    private var token = OAuth2TokenStorage.shared.token
     private init() {}
     private(set) var profile: Profile?
     
@@ -41,23 +41,14 @@ final class ProfileService {
             print("Bad Request: Error 400")
             return
         }
-        
-//        let newTask = urlSession.data(for: request) { [weak self] result in
-//            guard let self else { return }
         let newTask = urlSession.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>) in
             guard let self else { return }
             switch result {
             case .success(let profileResult):
-//                do {
-//                    let profileResult = try JSONDecoder().decode(ProfileResult.self,from: data)
                 guard let lastName = profileResult.lastName else { return }
-                let profile = Profile(username: profileResult.username, name: profileResult.firstName + " " + lastName/*profileResult.lastName*/, loginName: "@\(profileResult.username)", bio: profileResult.bio)
-                    self.profile = profile
-                    completion(.success(profile))
-                    
-//                } catch {
-//                    completion(.failure(error))
-//                }
+                let profile = Profile(username: profileResult.username, name: profileResult.firstName + " " + lastName, loginName: "@\(profileResult.username)", bio: profileResult.bio)
+                self.profile = profile
+                completion(.success(profile))
             case .failure(let error):
                 completion(.failure(error))
                 print("Network Error: \(error.localizedDescription)")
@@ -65,7 +56,7 @@ final class ProfileService {
             self.task = nil
         }
         self.task = newTask
-//        newTask.resume()
+        //        newTask.resume()
     }
     
     private func makeProfileRequest(token: String) -> URLRequest? {

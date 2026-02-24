@@ -21,11 +21,9 @@ final class SplashViewController: UIViewController {
         super.viewDidAppear(animated)
         if storage.token != nil {
             guard let token = storage.token else { return }
-//            switchToTabBarController()
             fetchProfile(token: token)
         } else {
             setupAuthViewController()
-//            performSegue(withIdentifier: segueIdentifier, sender: nil)
         }
     }
     
@@ -39,25 +37,6 @@ final class SplashViewController: UIViewController {
     }
 }
 
-//extension SplashViewController {
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == segueIdentifier {
-//            guard
-//                let navigationController = segue.destination as? UINavigationController,
-//                let viewController = navigationController.viewControllers.first as? AuthViewController
-//            else {
-//                
-//                assertionFailure("Failed to prepare for \(segueIdentifier)")
-//                return
-//            }
-//            
-//            viewController.delegate = self
-//        } else {
-//            super.prepare(for: segue, sender: sender)
-//        }
-//    }
-//}
-
 extension SplashViewController: AuthViewControllerDelegate {
     func didAuthenticate(_ vc: AuthViewController) {
         vc.dismiss(animated: true) { [weak self] in
@@ -65,12 +44,6 @@ extension SplashViewController: AuthViewControllerDelegate {
                   let token = self.storage.token else { return }
             self.fetchProfile(token: token)
         }
-        
-//        guard let token = storage.token else { return }
-//        
-//        fetchProfile(token: token)
-        
-//        switchToTabBarController()
     }
     
     func fetchProfile(token: String) {

@@ -31,31 +31,12 @@ final class WebViewViewController: UIViewController {
         
         estimatedProgressObservation = webView.observe(
             \.estimatedProgress,
-            options: [],
+             options: [],
              changeHandler: { [weak self] _, _ in
                  guard let self else { return }
                  self.updateProgress()
              })
     }
-    
-    
-    
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//        webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
-//        updateProgress()
-//    }
-//    override func viewDidDisappear(_ animated: Bool) {
-//        super.viewDidDisappear(animated)
-//        webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), context: nil)
-//    }
-//    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-//        if keyPath == #keyPath(WKWebView.estimatedProgress) {
-//            updateProgress()
-//        } else {
-//            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
-//        }
-//    }
     
     private func updateProgress() {
         progressView.progress = Float(webView.estimatedProgress)
@@ -84,7 +65,7 @@ extension WebViewViewController: WKNavigationDelegate {
             delegate?.webViewViewController(self, didAuthenticateWithCode: code)
             //TODO: process code
             decisionHandler(.cancel)
-//            dismiss(animated: true)
+            //            dismiss(animated: true)
         } else {
             decisionHandler(.allow)
         }
@@ -103,5 +84,4 @@ extension WebViewViewController: WKNavigationDelegate {
             return nil
         }
     }
-    
 }

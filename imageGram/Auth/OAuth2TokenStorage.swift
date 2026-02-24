@@ -8,14 +8,6 @@ final class OAuth2TokenStorage {
     
     private let tokenKey = "oauth2BearerToken"
     
-//    var token: String? {
-//        get {
-//            UserDefaults.standard.string(forKey: tokenKey)
-//        }
-//        set {
-//            UserDefaults.standard.setValue(newValue, forKey: tokenKey)
-//        }
-//    }
     var token: String? {
         get {
             return KeychainWrapper.standard.string(forKey: tokenKey)
@@ -28,5 +20,4 @@ final class OAuth2TokenStorage {
             }
         }
     }
-    
 }
