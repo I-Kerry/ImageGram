@@ -48,7 +48,7 @@ final class ProfileViewController: UIViewController {
     }
     
     private func setupImageView() {
-        let profileimage = UIImage(named: "image_photo")
+        let profileimage = MagicConstants.profileimage
         imageView = UIImageView(image: profileimage)
         view.addSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -86,7 +86,7 @@ final class ProfileViewController: UIViewController {
     }
     
     private func setupLogoutButton() {
-        logoutButton = UIButton.systemButton(with: UIImage(systemName: "ipad.and.arrow.forward")!, target: self, action: #selector(self.tapLogoutButton))
+        logoutButton = UIButton.systemButton(with: MagicConstants.logoutButton!, target: self, action: #selector(self.tapLogoutButton))
         logoutButton.tintColor = .ypRed
         view.addSubview(logoutButton)
         logoutButton.translatesAutoresizingMaskIntoConstraints = false
@@ -123,7 +123,7 @@ final class ProfileViewController: UIViewController {
             let imageUrl = URL(string: profileImageURL)
         else { return }
         
-        let placeholder = UIImage(systemName: "person.crop.circle.fill")?.withTintColor(.lightGray, renderingMode: .alwaysOriginal).withConfiguration(UIImage.SymbolConfiguration(pointSize: 70, weight: .regular, scale: .large))
+        lazy var placeholder = MagicConstants.personInCircle?.withTintColor(.lightGray, renderingMode: .alwaysOriginal).withConfiguration(UIImage.SymbolConfiguration(pointSize: 70, weight: .regular, scale: .large))
         
         let processor = RoundCornerImageProcessor(cornerRadius: 35)
         imageView.kf.indicatorType = .activity

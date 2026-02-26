@@ -34,7 +34,7 @@ final class SplashViewController: UIViewController {
             assertionFailure("Invalid window configuration")
             return
         }
-        let tabBarController = UIStoryboard(name: "Main", bundle: .main).instantiateViewController(withIdentifier: "TabBarViewController")
+        let tabBarController = UIStoryboard(name: "Main", bundle: .main).instantiateViewController(withIdentifier: MagicConstants.TabBarViewControllerIdentifier)
         window.rootViewController = tabBarController
     }
 }
@@ -69,7 +69,7 @@ extension SplashViewController: AuthViewControllerDelegate {
 
 extension SplashViewController {
     private func setupImageView() {
-        let logo = UIImage(named: "Vector")
+        let logo = MagicConstants.vectorLogo
         imageView = UIImageView(image: logo)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(imageView)
@@ -82,7 +82,7 @@ extension SplashViewController {
     
     private func setupAuthViewController() {
         let storyboard = UIStoryboard(name: "Main", bundle: .main)
-        guard let authViewController = storyboard.instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else { return }
+        guard let authViewController = storyboard.instantiateViewController(withIdentifier: MagicConstants.authViewControllerIdentifier) as? AuthViewController else { return }
         authViewController.delegate = self
         authViewController.modalPresentationStyle = .fullScreen
         present(authViewController, animated: true)
