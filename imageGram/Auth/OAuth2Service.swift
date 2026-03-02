@@ -1,29 +1,43 @@
 
-
 import Foundation
+
+enum AuthServiceError: Error {
+    case invalidRequest
+}
 
 final class OAuth2Service {
     
     static let shared = OAuth2Service()
+    private let urlSession = URLSession.shared
+    private var task: URLSessionTask?
+    private var lastCode: String?
     private init() {}
     
-    
-    
     func fetchOAuthToken(code: String, completion: @escaping (Result<String, Error>) -> Void) {
-        guard let request = makeOAuthTokenRequest(code: code) else {
-            print("OAuth2Service: failed to create token request")
-            completion(.failure(NetworkError.invalidRequest))
+        assert(Thread.isMainThread)
+        guard lastCode != code else { completion(.failure(AuthServiceError.invalidRequest))
+            print("[OAuth2Service.fetchOAuthToken]: \(AuthServiceError.invalidRequest)")
+            return
+        }
+        task?.cancel()
+        lastCode = code
+        
+        guard
+            let request = makeOAuthTokenRequest(code: code)
+        else {
+            completion(.failure(AuthServiceError.invalidRequest))
+            print("[OAuth2Service.fetchOAuthToken]: \(AuthServiceError.invalidRequest)")
             return
         }
         
-        fetch(request: request) { result in
-            switch result {
-            case .success(let data):
-                do {
-                    let response = try JSONDecoder().decode(OAuthTokenResponseBody.self, from: data)
+        self.task = urlSession.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
+            guard let self else { return }
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let response):
                     let token = response.accessToken
                     guard !token.isEmpty else {
-                        print("An empty token is received")
+                        print("[OAuth2Service.fetchOAuthToken]: \(NetworkError.decodingError(NSError(domain: "Empty token", code: 0)))")
                         completion(.failure(NetworkError.decodingError(NSError(domain: "Empty token", code: 0))))
                         return
                     }
@@ -31,14 +45,12 @@ final class OAuth2Service {
                     DispatchQueue.main.async {
                         completion(.success(token))
                     }
-                    
-                } catch {
-                    print(String(data: data, encoding: .utf8))
+                case .failure(let error):
+                    print("[OAuth2Service.fetchOAuthToken]: \(error)")
                     completion(.failure(error))
                 }
-            case .failure(let error):
-                print("Network Error: \(error.localizedDescription)")
-                completion(.failure(error))
+                self.task = nil
+                self.lastCode = nil
             }
         }
     }
@@ -65,13 +77,5 @@ final class OAuth2Service {
         urlRequest.httpMethod = "POST"
         
         return urlRequest
-    }
-    
-    private func fetch(request: URLRequest, handler: @escaping (Result<Data, Error>) -> Void) {
-        let task = URLSession.shared.data(for: request) { result in
-            handler(result)
-        }
-        task.resume()
-        
     }
 }

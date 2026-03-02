@@ -1,11 +1,17 @@
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
+    
+    private var profileImageServiceObserver: NSObjectProtocol?
+    
     private var imageView: UIImageView!
     private var nameLabel: UILabel!
     private var loginName: UILabel!
     private var discription: UILabel!
     private var logoutButton: UIButton!
+    
+    private var profileService = ProfileService.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -17,14 +23,32 @@ final class ProfileViewController: UIViewController {
         setupLogoutButton()
         setupConstraints()
         
+        view.backgroundColor = .ypBlack
+        
+        profileImageServiceObserver = NotificationCenter.default.addObserver(
+            forName: ProfileImageService.didChangeNotification,
+            object: nil,
+            queue: .main) { [weak self ] _ in
+                guard let self else { return }
+                self.updateAvatar()
+            }
+        
+        updateAvatar()
+        
+        if let profile = profileService.profile {
+            updateProfile(profile: profile)
+            ProfileImageService.shared.fetchProfileImageURL(username: profile.username) { _ in
+            }
+        }
     }
     
     @objc
     private func tapLogoutButton() {
+        OAuth2TokenStorage.shared.token = nil
     }
     
     private func setupImageView() {
-        let profileimage = UIImage(named: "image_photo")
+        let profileimage = MagicConstants.profileimage
         imageView = UIImageView(image: profileimage)
         view.addSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -62,7 +86,7 @@ final class ProfileViewController: UIViewController {
     }
     
     private func setupLogoutButton() {
-        logoutButton = UIButton.systemButton(with: UIImage(systemName: "ipad.and.arrow.forward")!, target: self, action: #selector(self.tapLogoutButton))
+        logoutButton = UIButton.systemButton(with: MagicConstants.logoutButton!, target: self, action: #selector(self.tapLogoutButton))
         logoutButton.tintColor = .ypRed
         view.addSubview(logoutButton)
         logoutButton.translatesAutoresizingMaskIntoConstraints = false
@@ -86,4 +110,33 @@ final class ProfileViewController: UIViewController {
             imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor)
         ])
     }
+    
+    private func updateProfile(profile: Profile) {
+        nameLabel.text = profile.name.isEmpty ? "Uknown" : profile.name
+        loginName.text = profile.loginName.isEmpty ? "@Uknown" : profile.loginName
+        discription.text = profile.bio?.isEmpty != nil ? profile.bio : "There is nothing yet"
+    }
+    
+    private func updateAvatar() {
+        guard
+            let profileImageURL = ProfileImageService.shared.avatarURL,
+            let imageUrl = URL(string: profileImageURL)
+        else { return }
+        
+        lazy var placeholder = MagicConstants.personInCircle?.withTintColor(.lightGray, renderingMode: .alwaysOriginal).withConfiguration(UIImage.SymbolConfiguration(pointSize: 70, weight: .regular, scale: .large))
+        
+        let processor = RoundCornerImageProcessor(cornerRadius: 35)
+        imageView.kf.indicatorType = .activity
+        imageView.kf.setImage(with: imageUrl, placeholder: placeholder, options: [.processor(processor), .scaleFactor(UIScreen.main.scale), .cacheOriginalImage, .forceRefresh]) { result in
+            switch result {
+            case .success(let value):
+                print(value.image)
+                print(value.cacheType)
+                print(value.source)
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
 }
+
