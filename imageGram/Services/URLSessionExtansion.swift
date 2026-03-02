@@ -27,17 +27,14 @@ extension URLSession {
                     fulfillCompletionOnTheMainThread(.success(data))
                 } else {
                     print("[URLSession.data]: \(NetworkError.httpStatusCode(statusCode))")
-//                    print("HTTP error: status code \(statusCode)")
                     fulfillCompletionOnTheMainThread(.failure(NetworkError.httpStatusCode(statusCode)))
                 }
             } else if let error = error {
                 print("[URLSession.data]: \(NetworkError.urlRequestError(error))")
                 fulfillCompletionOnTheMainThread(.failure(NetworkError.urlRequestError(error)))
-//                print("Failed \(error), URL was not reached")
             } else {
                 fulfillCompletionOnTheMainThread(.failure(NetworkError.urlSessionError))
                 print("[URLSession.data]: \(NetworkError.urlSessionError)")
-//                print("Session failed")
             }
         })
         
@@ -60,12 +57,10 @@ extension URLSession {
                     completion(.success(object))
                 } catch {
                     completion(.failure(NetworkError.decodingError(error)))
-//                    print("Ошибка декодирования: \(error.localizedDescription), Данные:\(String(data: data, encoding: .utf8) ?? "Unable to form into String form")")
                     print("[URLSession.objectTask]: \(NetworkError.decodingError(error)), data \(String(data: data, encoding: .utf8) ?? "nil")")
                 }
             case .failure(let error):
                 completion(.failure(error))
-//                print("Network Error")
                 print("[URLSession.objectTask]: \(error)")
             }
         }

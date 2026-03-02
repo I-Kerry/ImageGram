@@ -28,7 +28,6 @@ final class ProfileService {
     static let shared = ProfileService()
     private var task: URLSessionTask?
     private var urlSession = URLSession.shared
-    //    private var token = OAuth2TokenStorage.shared.token
     private init() {}
     private(set) var profile: Profile?
     
@@ -39,32 +38,28 @@ final class ProfileService {
         guard let request = makeProfileRequest(token: token) else {
             print("[ProfileService.fetchProfile] \(NetworkError.invalidRequest)")
             completion(.failure(NetworkError.invalidRequest))
-//            print("Bad Request: Error 400")
             return
         }
         let newTask = urlSession.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>) in
             guard let self else { return }
             switch result {
             case .success(let profileResult):
-//                guard let lastName = profileResult.lastName else { return }
                 let fullName: String
                 if let lastName = profileResult.lastName {
                     fullName = profileResult.firstName + " " + lastName
                 } else {
                     fullName = profileResult.firstName
                 }
-                let profile = Profile(username: profileResult.username, name: fullName /*profileResult.firstName + " " + lastName*/, loginName: "@\(profileResult.username)", bio: profileResult.bio)
+                let profile = Profile(username: profileResult.username, name: fullName, loginName: "@\(profileResult.username)", bio: profileResult.bio)
                 self.profile = profile
                 completion(.success(profile))
             case .failure(let error):
                 print("[ProfileService.fetchProfile] \(error)")
                 completion(.failure(error))
-//                print("Network Error: \(error.localizedDescription)")
             }
             self.task = nil
         }
         self.task = newTask
-        //        newTask.resume()
     }
     
     private func makeProfileRequest(token: String) -> URLRequest? {

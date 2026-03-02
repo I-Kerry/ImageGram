@@ -26,7 +26,6 @@ final class OAuth2Service {
             let request = makeOAuthTokenRequest(code: code)
         else {
             completion(.failure(AuthServiceError.invalidRequest))
-//            print("Bad Request: Error 400")
             print("[OAuth2Service.fetchOAuthToken]: \(AuthServiceError.invalidRequest)")
             return
         }
@@ -38,7 +37,6 @@ final class OAuth2Service {
                 case .success(let response):
                     let token = response.accessToken
                     guard !token.isEmpty else {
-//                        print("An empty token is received")
                         print("[OAuth2Service.fetchOAuthToken]: \(NetworkError.decodingError(NSError(domain: "Empty token", code: 0)))")
                         completion(.failure(NetworkError.decodingError(NSError(domain: "Empty token", code: 0))))
                         return
@@ -48,7 +46,6 @@ final class OAuth2Service {
                         completion(.success(token))
                     }
                 case .failure(let error):
-//                    print("Network Error: \(error.localizedDescription)")
                     print("[OAuth2Service.fetchOAuthToken]: \(error)")
                     completion(.failure(error))
                 }

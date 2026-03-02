@@ -33,13 +33,11 @@ final class ProfileImageService {
         guard let token = OAuth2TokenStorage.shared.token else {
             print("[ProfileImageService.fetchProfileImageURL]: \(NetworkError.invalidRequest)")
             completion(.failure(NetworkError.invalidRequest))
-//            print("Network Error 401")
             return
         }
         guard let request = makeProfileImageRequest(username: username, token: token) else {
             print("[ProfileImageService.fetchProfileImageURL]: \(NetworkError.invalidRequest)")
             completion(.failure(NetworkError.invalidRequest))
-//            print("Bad Request: Error 400")
             return
         }
         let newTask = urlSession.objectTask(for: request) { [weak self] (result: Result<UserResult, Error>) in
@@ -53,14 +51,12 @@ final class ProfileImageService {
                     object: self,
                     userInfo: ["URL": userResult.profileImage.small])
             case .failure(let error):
-//                assertionFailure("Request error \(error.localizedDescription)")
                 print("[ProfileImageService.fetchProfileImageURL]: \(error)")
                 completion(.failure(error))
             }
             self.task = nil
         }
         self.task = newTask
-        //        newTask.resume()
     }
     private func makeProfileImageRequest(username: String, token: String) -> URLRequest? {
         guard let url = URL(string: "https://api.unsplash.com/users/\(username)") else { return nil }
