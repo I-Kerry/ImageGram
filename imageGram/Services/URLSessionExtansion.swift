@@ -10,6 +10,10 @@ enum NetworkError: Error {
     case decodingError(Error)
 }
 
+protocol URLSessionProtocol {
+    func objectTask<T: Decodable>(for request: URLRequest, completion: @escaping (Result<T, Error>) -> Void ) -> URLSessionTask
+}
+
 extension URLSession {
     func data(
         for request: URLRequest,
@@ -42,7 +46,7 @@ extension URLSession {
     }
 }
 
-extension URLSession {
+extension URLSession: URLSessionProtocol {
     func objectTask<T: Decodable>(
         for request: URLRequest,
         completion: @escaping (Result<T, Error>) -> Void
