@@ -45,6 +45,11 @@ final class ProfileViewController: UIViewController {
     @objc
     private func tapLogoutButton() {
         OAuth2TokenStorage.shared.token = nil
+        ProfileLogoutService.shared.logout()
+        guard let window = UIApplication.shared.windows.first else { return }
+        let splashVc = SplashViewController()
+        window.rootViewController = splashVc
+        window.makeKeyAndVisible()
     }
     
     private func setupImageView() {
