@@ -48,11 +48,6 @@
 			path = imageGram;
 			sourceTree = "<group>";
 		};
-		35661A9C2F5707CD004D7EAC /* imageGramTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = imageGramTests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,7 +76,6 @@
 			isa = PBXGroup;
 			children = (
 				355FF76B2F308401004E1C36 /* imageGram */,
-				35661A9C2F5707CD004D7EAC /* imageGramTests */,
 				35F4B79B2F24CE5B00F123E5 /* Frameworks */,
 				356B75E02EFD3E1900F778C0 /* Products */,
 			);
@@ -119,9 +113,6 @@
 			);
 			dependencies = (
 				35661AA02F5707CD004D7EAC /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				35661A9C2F5707CD004D7EAC /* imageGramTests */,
 			);
 			name = imageGramTests;
 			packageProductDependencies = (

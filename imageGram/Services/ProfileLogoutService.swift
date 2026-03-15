@@ -6,6 +6,7 @@ final class ProfileLogoutService {
     init() {}
     
     func logout() {
+        OAuth2TokenStorage.shared.token = nil
         cleanCookies()
         ProfileService.shared.cleanProfile()
         ProfileImageService.shared.cleanProfileImage()

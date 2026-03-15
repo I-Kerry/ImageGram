@@ -12,10 +12,6 @@ class ImagesListViewController: UIViewController {
     
     private let showSingleImageSegueIdentifier = "ShowSingleImage"
     
-    private let currentDate = Date()
-    
-    private let photosName: [String] = Array(0..<20).map{ "\($0)"}
-    
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .long
@@ -50,8 +46,6 @@ class ImagesListViewController: UIViewController {
                 assertionFailure("Invalid segue destination")
                 return
             }
-//            let image = UIImage(named: photosName[indexPath.row])
-//            viewController.image = image
             let photo = photos[indexPath.row]
             viewController.largeImageUrl = photo.largeImageURL
         } else {
@@ -60,7 +54,6 @@ class ImagesListViewController: UIViewController {
     }
     
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
-//        let imageName = photosName[indexPath.row]
         let photo = photos[indexPath.row]
         let thumbURL = photo.thumbImageURL
         let url = URL(string: thumbURL)
@@ -80,20 +73,15 @@ class ImagesListViewController: UIViewController {
             }
         }
         
-//        cell.setIsLiked(photo.isLiked)
+        let likeImage = photo.isLiked ? UIImage(resource: .buttonActive) : UIImage(resource: .buttonNonActive)
+        cell.likeButton.setImage(likeImage, for: .normal)
         
-//        if let image = UIImage(named: imageName) {
-//            cell.tableImage.image = image }
-//        else {
-//            return
-//        }
-        cell.dateLabel.text = dateFormatter.string(from: currentDate)
+        if let date = photo.createdAt {
+            cell.dateLabel.text = dateFormatter.string(from: date)
+        } else {
+            cell.dateLabel.text = ""
+        }
         
-//        if indexPath.row % 2 != 0 {
-//            cell.likeButton.setImage(UIImage(resource: .buttonActive), for: .normal)
-//        } else {
-//            cell.likeButton.setImage(UIImage(resource: .buttonNonActive), for: .normal)
-//        }
         cell.delegate = self
     }
 }
@@ -105,7 +93,6 @@ extension ImagesListViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        guard let image = UIImage(named: photosName[indexPath.row]) else { return 0}
         let photo = photos[indexPath.row]
         
         let imageSize = photo.size
@@ -125,7 +112,6 @@ extension ImagesListViewController: UITableViewDelegate {
 extension ImagesListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return photosName.count
         return photos.count
     }
     

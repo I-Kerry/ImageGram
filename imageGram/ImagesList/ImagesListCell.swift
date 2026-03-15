@@ -21,7 +21,6 @@ final class ImagesListCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         tableImage.kf.cancelDownloadTask()
-//        tableImage.image = nil
     }
     
     @IBAction func likeButtonClicked() {
