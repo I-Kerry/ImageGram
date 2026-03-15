@@ -15,9 +15,7 @@ final class AuthViewController: UIViewController, WebViewControllerDelegate {
             configureBackButton()
         }
 
-    func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
-        //        vc.dismiss(animated: true)
-        
+    func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {        
         UIBlockingProgressHUD.show()
         
         OAuth2Service.shared.fetchOAuthToken(code: code) { [weak self] result in

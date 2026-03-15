@@ -30,11 +30,6 @@ final class SingleImageViewController: UIViewController {
         scrollView.maximumZoomScale = Constants.maxZoomScale
         
         loadImage()
-        
-//        guard let image else { return }
-//        imageView.image = image
-//        imageView.frame.size = image.size
-//        rescaleAndCenterImageInScrollView(image: image)
     }
     
     @IBAction private func didTapBackButton() {
@@ -62,7 +57,6 @@ final class SingleImageViewController: UIViewController {
         let x = max(0, (scrollView.bounds.width - scrollView.contentSize.width) / 2)
         let y = max(0, (scrollView.bounds.height - scrollView.contentSize.height) / 2)
         scrollView.contentInset = UIEdgeInsets(top: y, left: x, bottom: y, right: x)
-//        scrollView.contentOffset = CGPoint(x: -x, y: -y)
         guard let image else { return }
         scrollView.contentSize = image.size
     }

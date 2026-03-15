@@ -19,9 +19,7 @@ final class ImagesListService {
         guard task == nil else { return }
         
         let nextPage = (lastLoadedPage ?? 0) + 1
-        
-//        guard let url = URL(string: "https://api.unsplash.com/photos") else { return }
-        
+                
         guard var urlComponents = URLComponents(string: "https://api.unsplash.com/photos") else { return }
         urlComponents.queryItems = [
             URLQueryItem(name: "page", value: "\(nextPage)"),
@@ -62,7 +60,6 @@ final class ImagesListService {
         }
         
         task = newTask
-//        newTask.resume()
     }
     
     func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {

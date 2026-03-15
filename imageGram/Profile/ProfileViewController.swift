@@ -13,6 +13,33 @@ final class ProfileViewController: UIViewController {
     
     private var profileService = ProfileService.shared
     
+    private var colorControl = ColorControls()
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        if imageView.layer.sublayers?.isEmpty ?? true {
+            let gradient = colorControl.makeUploadingAnimation(view: imageView)
+            imageView.layer.addSublayer(gradient)
+            colorControl.startAnimation(on: gradient)
+        }
+        if nameLabel.layer.sublayers?.isEmpty ?? true {
+            let gradient = colorControl.makeUploadingAnimation(view: nameLabel)
+            imageView.layer.addSublayer(gradient)
+            colorControl.startAnimation(on: gradient)
+        }
+        if loginName.layer.sublayers?.isEmpty ?? true {
+            let gradient = colorControl.makeUploadingAnimation(view: loginName)
+            imageView.layer.addSublayer(gradient)
+            colorControl.startAnimation(on: gradient)
+        }
+        if discription.layer.sublayers?.isEmpty ?? true {
+            let gradient = colorControl.makeUploadingAnimation(view: discription)
+            imageView.layer.addSublayer(gradient)
+            colorControl.startAnimation(on: gradient)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -30,6 +57,7 @@ final class ProfileViewController: UIViewController {
             object: nil,
             queue: .main) { [weak self ] _ in
                 guard let self else { return }
+                colorControl.stopAnimations()
                 self.updateAvatar()
             }
         
@@ -61,6 +89,9 @@ final class ProfileViewController: UIViewController {
         imageView.layer.masksToBounds = true
         imageView.layer.cornerRadius = 35
         
+        let gradient = colorControl.makeUploadingAnimation(view: imageView)
+        imageView.layer.addSublayer(gradient)
+        colorControl.startAnimation(on: gradient)
     }
     
     private func setupNameLabel() {
@@ -70,6 +101,10 @@ final class ProfileViewController: UIViewController {
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.font = UIFont.systemFont(ofSize: 23, weight: .semibold)
         nameLabel.textColor = .white
+        
+        let gradient = colorControl.makeUploadingAnimation(view: nameLabel)
+        nameLabel.layer.addSublayer(gradient)
+        colorControl.startAnimation(on: gradient)
     }
     
     private func setupLoginName() {
@@ -79,6 +114,10 @@ final class ProfileViewController: UIViewController {
         loginName.translatesAutoresizingMaskIntoConstraints = false
         loginName.textColor = .ypGrayLoginName
         loginName.font = UIFont.systemFont(ofSize: 13)
+        
+        let gradient = colorControl.makeUploadingAnimation(view: loginName)
+        loginName.layer.addSublayer(gradient)
+        colorControl.startAnimation(on: gradient)
     }
     
     private func setupDiscription() {
@@ -88,6 +127,10 @@ final class ProfileViewController: UIViewController {
         discription.translatesAutoresizingMaskIntoConstraints = false
         discription.textColor = .white
         discription.font = UIFont.systemFont(ofSize: 13)
+        
+        let gradient = colorControl.makeUploadingAnimation(view: discription)
+        discription.layer.addSublayer(gradient)
+        colorControl.startAnimation(on: gradient)
     }
     
     private func setupLogoutButton() {
