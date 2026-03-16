@@ -2,15 +2,21 @@
 import UIKit
 import Kingfisher
 
-class ImagesListViewController: UIViewController {
+final class ImagesListViewController: UIViewController {
     
-    weak var delegate: ImagesListCellDelegate?
+    // MARK: - IBOutlets
     
     @IBOutlet private var tableView: UITableView!
+    
+    // MARK: - Properties
+    
+    weak var delegate: ImagesListCellDelegate?
     
     private var photos: [Photo] = []
     
     private let showSingleImageSegueIdentifier = "ShowSingleImage"
+    
+    // MARK: - Formatters
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -19,39 +25,49 @@ class ImagesListViewController: UIViewController {
         return formatter
     }()
     
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.dataSource = self
-        tableView.delegate = self
-        
-        tableView.rowHeight = 200
-        tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
-        
-        NotificationCenter.default.addObserver(
-            forName: ImagesListService.didChangeNotification,
-            object: nil,
-            queue: .main) { _ in
-                self.updateTableViewAnimated()
-            }
+        setupTableView()
+        setupNotification()
         ImagesListService.shared.fetchPhotosNextPage()
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == showSingleImageSegueIdentifier {
-            guard
-                let viewController = segue.destination as? SingleImageViewController,
-                let indexPath = sender as? IndexPath
-            else {
-                assertionFailure("Invalid segue destination")
-                return
-            }
-            let photo = photos[indexPath.row]
-            viewController.largeImageUrl = photo.largeImageURL
-        } else {
-            super.prepare(for: segue, sender: sender)
-        }
+    // MARK: - Setup
+    
+    private func setupTableView() {
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
     }
+    
+    private func setupNotification() {
+        NotificationCenter.default.addObserver(
+            forName: ImagesListService.didChangeNotification,
+            object: nil,
+            queue: .main) { [weak self] _ in
+                guard let self else { return }
+                self.updateTableViewAnimated()
+            }
+    }
+    
+    // MARK: - Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+
+        guard segue.identifier == showSingleImageSegueIdentifier,
+              let viewController = segue.destination as? SingleImageViewController,
+              let indexPath = sender as? IndexPath
+        else {
+            return
+        }
+        let photo = photos[indexPath.row]
+        viewController.largeImageUrl = photo.largeImageURL
+    }
+    
+    // MARK: - Cell Congiguration
     
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
         let photo = photos[indexPath.row]
@@ -86,6 +102,8 @@ class ImagesListViewController: UIViewController {
     }
 }
 
+// MARK: - UITableViewDelegate
+
 extension ImagesListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -108,6 +126,8 @@ extension ImagesListViewController: UITableViewDelegate {
         return cellHeight
     }
 }
+
+// MARK: - UITableViewDataSource
 
 extension ImagesListViewController: UITableViewDataSource {
     
@@ -137,6 +157,8 @@ extension ImagesListViewController: UITableViewDataSource {
     }
 }
 
+// MARK: - TableView Update
+
 extension ImagesListViewController {
     
     func updateTableViewAnimated() {
@@ -156,6 +178,8 @@ extension ImagesListViewController {
         }
     }
 }
+
+// MARK: - ImagesListCellDelegate
 
 extension ImagesListViewController: ImagesListCellDelegate {
     func imagesListCellDidTapLike(_ cell: ImagesListCell) {
@@ -178,6 +202,8 @@ extension ImagesListViewController: ImagesListCellDelegate {
         }
     }
 }
+
+// MARK: - Alerts
 
 extension ImagesListViewController {
     func showAlert() {

@@ -3,18 +3,27 @@ import Kingfisher
 import ProgressHUD
 
 final class SingleImageViewController: UIViewController {
-    private enum Constants {
-        static let minZoomScale = 0.1
-        static let maxZoomScale = 1.25
-    }
     
-    var image: UIImage?
-    
-    var largeImageUrl: String?
+    // MARK: - IBOutlets
     
     @IBOutlet private weak var imageView: UIImageView!
     @IBOutlet private weak var tapBackButton: UIButton!
     @IBOutlet private var scrollView: UIScrollView!
+    
+    // MARK: - Properties
+    
+    var image: UIImage?
+        
+    var largeImageUrl: String?
+    
+    // MARK: - Constants
+    
+    private enum Constants {
+            static let minZoomScale = 0.1
+            static let maxZoomScale = 1.25
+        }
+    
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,9 +33,24 @@ final class SingleImageViewController: UIViewController {
         loadImage()
     }
     
+    // MARK: - Back Button Function
+    
     @IBAction private func didTapBackButton() {
         dismiss(animated: true, completion: nil)
     }
+    
+    // MARK: - Share Button Function
+    
+    @IBAction func didTapShareButton(_ sender: UIButton) {
+            guard let image = imageView.image else { return }
+            
+            let sharingVC = UIActivityViewController(activityItems: [image], applicationActivities: nil)
+            
+            present(sharingVC, animated: true, completion: nil)
+        }
+    
+    // MARK: - Image Settings
+    
     private func rescaleAndCenterImageInScrollView(image: UIImage) {
         imageView.image = image
         imageView.frame.size = image.size
@@ -53,13 +77,7 @@ final class SingleImageViewController: UIViewController {
         scrollView.contentSize = image.size
     }
     
-    @IBAction func didTapShareButton(_ sender: UIButton) {
-        guard let image = imageView.image else { return }
-        
-        let sharingVC = UIActivityViewController(activityItems: [image], applicationActivities: nil)
-        
-        present(sharingVC, animated: true, completion: nil)
-    }
+    // MARK: - Image Loading
     
     func loadImage() {
         guard let largeImageUrl = largeImageUrl else { return }
@@ -82,6 +100,8 @@ final class SingleImageViewController: UIViewController {
     }
 }
 
+// MARK: - UIScrollViewDelegate
+
 extension SingleImageViewController: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         imageView
@@ -90,6 +110,9 @@ extension SingleImageViewController: UIScrollViewDelegate {
         updateContentInsets()
     }
 }
+
+// MARK: - Alerts
+
 extension SingleImageViewController {
     func showError() {
         let alert = UIAlertController(title: "Something went wrong.", message: "Do you want to try again?", preferredStyle: .alert)

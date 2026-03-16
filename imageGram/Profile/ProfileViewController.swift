@@ -86,7 +86,9 @@ final class ProfileViewController: UIViewController {
     }
     
     private func setupLogoutButton() {
-        logoutButton = UIButton.systemButton(with: MagicConstants.logoutButton!, target: self, action: #selector(self.tapLogoutButton))
+        guard let logoutImage = MagicConstants.logoutButton else { return }
+        
+        logoutButton = UIButton.systemButton(with: logoutImage, target: self, action: #selector(self.tapLogoutButton))
         logoutButton.tintColor = .ypRed
         view.addSubview(logoutButton)
         logoutButton.translatesAutoresizingMaskIntoConstraints = false
