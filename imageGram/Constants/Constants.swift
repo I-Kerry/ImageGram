@@ -20,4 +20,6 @@ enum MagicConstants {
     static let imagesListViewControllerIdentifier = "ImagesListViewController"
     static let authViewControllerIdentifier = "AuthViewController"
     static let TabBarViewControllerIdentifier = "TabBarViewController"
+    
+    static let photoPlaceholder = UIImage(named: "stub")
 }

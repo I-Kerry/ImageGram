@@ -44,7 +44,7 @@ final class ProfileViewController: UIViewController {
     
     @objc
     private func tapLogoutButton() {
-        OAuth2TokenStorage.shared.token = nil
+        showAlert()
     }
     
     private func setupImageView() {
@@ -86,7 +86,9 @@ final class ProfileViewController: UIViewController {
     }
     
     private func setupLogoutButton() {
-        logoutButton = UIButton.systemButton(with: MagicConstants.logoutButton!, target: self, action: #selector(self.tapLogoutButton))
+        guard let logoutImage = MagicConstants.logoutButton else { return }
+        
+        logoutButton = UIButton.systemButton(with: logoutImage, target: self, action: #selector(self.tapLogoutButton))
         logoutButton.tintColor = .ypRed
         view.addSubview(logoutButton)
         logoutButton.translatesAutoresizingMaskIntoConstraints = false
@@ -140,3 +142,21 @@ final class ProfileViewController: UIViewController {
     }
 }
 
+extension ProfileViewController {
+    func showAlert() {
+        let alert = UIAlertController(title: "Bye, bye", message: "Are you sure you want to leave?", preferredStyle: .alert)
+        let alertAction1 = UIAlertAction(title: "No", style: .default) { _ in
+        return }
+        let alertAction2 = UIAlertAction(title: "Yes", style: .default) { _ in
+            ProfileLogoutService.shared.logout()
+            guard let window = UIApplication.shared.windows.first else { return }
+            let splashVc = SplashViewController()
+            window.rootViewController = splashVc
+            window.makeKeyAndVisible()
+        }
+        alert.addAction(alertAction2)
+        alert.addAction(alertAction1)
+        
+        present(alert, animated: true)
+    }
+}
