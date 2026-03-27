@@ -35,8 +35,6 @@ final class ProfileViewPresenter: ProfileViewPresenterProtocol {
             view?.updateProfile(name: profile.name, lName: profile.loginName, bio: profile.bio)
             profileImageService.fetchProfileImageURL(username: profile.username) { _ in
             }
-//            ProfileImageService.shared.fetchProfileImageURL(username: profile.username) { _ in
-//            }
         }
     }
     

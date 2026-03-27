@@ -7,7 +7,6 @@ final class ImageListTests: XCTestCase {
     func testViewControllerCallsViewDidLoad() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewController(identifier: "ImagesListViewController") as! ImagesListViewController
-//        let vc = ImagesListViewController()
         let presenter = ImagesListPresenterSpy()
         vc.presenter = presenter
         presenter.view = vc
@@ -18,10 +17,13 @@ final class ImageListTests: XCTestCase {
     }
     func testPresenterCallsUpdateTableView() {
         let vc = ImagesListViewControllerSpy()
-        let presenter = ImageListPresenter()
+        let service = ImagesListServiceMock()
+        let presenter = ImageListPresenter(service: service)
         
         presenter.view = vc
         presenter.viewDidLoad()
+        
+        NotificationCenter.default.post(name: ImagesListService.didChangeNotification, object: nil)
         
         XCTAssertTrue(vc.tableViewCalled)
     }
@@ -85,3 +87,18 @@ final class ImagesListViewControllerSpy: ImagesListViewControllerProtocol {
     }
 }
 
+final class ImagesListServiceMock: ImagesListServiceProtocol {
+    var photos: [Photo] = []
+    
+    var fetchPhotoNextPageCalled = false
+    
+    func fetchPhotosNextPage() {
+        fetchPhotoNextPageCalled = true
+    }
+    
+    func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, any Error>) -> Void) {
+        
+    }
+    
+    
+}

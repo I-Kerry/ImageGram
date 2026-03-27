@@ -36,21 +36,14 @@ final class ImagesListViewController: UIViewController, ImagesListViewController
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-//        let presenter = ImageListPresenter()
-//        configure(presenter)
         if presenter == nil {
             let presenter = ImageListPresenter()
             configure(presenter)
         } else {
             presenter?.view = self
         }
-        
-        
         setupTableView()
         presenter?.viewDidLoad()
-//        setupNotification()
-//        ImagesListService.shared.fetchPhotosNextPage()
     }
     
     // MARK: - Setup
@@ -60,16 +53,6 @@ final class ImagesListViewController: UIViewController, ImagesListViewController
         tableView.delegate = self
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
     }
-    
-//    func setupNotification() {
-//        NotificationCenter.default.addObserver(
-//            forName: ImagesListService.didChangeNotification,
-//            object: nil,
-//            queue: .main) { [weak self] _ in
-//                guard let self else { return }
-//                self.updateTableViewAnimated()
-//            }
-//    }
     
     // MARK: - Navigation
     
@@ -89,7 +72,6 @@ final class ImagesListViewController: UIViewController, ImagesListViewController
     
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
         guard let photo = presenter?.photos[indexPath.row] else { return }
-//        let photo = photos[indexPath.row]
         let thumbURL = photo.thumbImageURL
         let url = URL(string: thumbURL)
         
@@ -187,12 +169,6 @@ extension ImagesListViewController: UITableViewDataSource {
 extension ImagesListViewController {
     
     func updateTableViewAnimated(oldCount: Int, newCount: Int) {
-        
-//        let oldCount = photos.count
-//        let newCount = ImagesListService.shared.photos.count
-//        
-//        photos = ImagesListService.shared.photos
-        
         if oldCount != newCount {
             tableView.performBatchUpdates {
                 let indexArray = (oldCount..<newCount).map { n in
@@ -210,25 +186,6 @@ extension ImagesListViewController: ImagesListCellDelegate {
     func imagesListCellDidTapLike(_ cell: ImagesListCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
         presenter?.didTapLike(at: indexPath)
-//        guard let photo = presenter?.photos[indexPath.row] else { return }
-//        
-//        UIBlockingProgressHUD.show()
-//        ImagesListService.shared.changeLike(photoId: photo.id, isLike: photo.isLiked) { result in
-//            switch result {
-//            case .success:
-////                self.photos = ImagesListService.shared.photos
-//                self.presenter?.photos = ImagesListService.shared.photos
-////                cell.setIsLiked(self.presenter?.photos[indexPath.row].isLiked)
-//                guard let isLiked = self.presenter?.photos[indexPath.row].isLiked else { return }
-//                cell.setIsLiked(isLiked)
-//                
-//                UIBlockingProgressHUD.dismiss()
-//            case .failure(let failure):
-//                UIBlockingProgressHUD.dismiss()
-//                print("[ImagesListViewController.imagesListCellDidTapLike]: \(failure)")
-//                self.showAlert()
-//            }
-//        }
     }
     
     func updateLike(at indexPath: IndexPath, isLiked: Bool) {

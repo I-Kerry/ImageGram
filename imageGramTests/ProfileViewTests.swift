@@ -24,14 +24,8 @@ final class ProfileViewTests: XCTestCase {
         let profileImageService = ProfileImageServiceMock()
         let presenter = ProfileViewPresenter(profileService: profileService, profileImageService: profileImageService)
         presenter.view = vc
-        guard
-            let url = ProfileImageService.shared.avatarURL,
-            let imageUrl = URL(string: url)
-        else { return }
-        
-        presenter.fetchAvatarUrl()
-        vc.updateAvatar(url: imageUrl)
-        
+        profileImageService.avatarURL = "test"
+
         presenter.viewDidload()
         
         

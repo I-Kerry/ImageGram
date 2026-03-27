@@ -10,17 +10,13 @@ public protocol ProfileViewControllerProtocol: AnyObject {
 final class ProfileViewController: UIViewController & ProfileViewControllerProtocol {
     var presenter: ProfileViewPresenterProtocol?
     private var profileImageService: ProfileImageServiceProtocol? = ProfileImageService.shared
-
-    //    private var profileImageServiceObserver: NSObjectProtocol?
     
     private var imageView: UIImageView!
     private var nameLabel: UILabel!
     private var loginName: UILabel!
     private var discription: UILabel!
     private var logoutButton: UIButton!
-    
-//    private var profileService = ProfileService.shared
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -39,24 +35,6 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
         configure(presenter)
         
         presenter.viewDidload()
-
-//        let presenter = ProfileViewPresenter(profileService: ProfileService.shared, profileImageService: profileImageService)
- 
-//        profileImageServiceObserver = NotificationCenter.default.addObserver(
-//            forName: ProfileImageService.didChangeNotification,
-//            object: nil,
-//            queue: .main) { [weak self ] _ in
-//                guard let self else { return }
-//                self.updateAvatar()
-//            }
-        
-//        updateAvatar()
-        
-//        if let profile = profileService.profile {
-//            updateProfile(profile: profile)
-//            ProfileImageService.shared.fetchProfileImageURL(username: profile.username) { _ in
-//            }
-//        }
     }
     
     @objc

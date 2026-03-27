@@ -6,12 +6,8 @@ final class imageGramUITests: XCTestCase {
     private let app = XCUIApplication()
 
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-
-        // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
-
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
+        
         app.launch()
         
     }
@@ -25,7 +21,6 @@ final class imageGramUITests: XCTestCase {
         XCTAssertTrue(loginTextField.waitForExistence(timeout: 5))
         loginTextField.tap()
         loginTextField.typeText("")
-//        webView.swipeUp()
         // MARK: лучше нажать самому на экран после введения логина, у меня на симуляторе только так можно было скрыть клавиатуру, которая на полэкрана(свайпа, рандомный тап по экрану, нажатие кнопки на самой клаве не помогали)
         loginTextField.coordinate(withNormalizedOffset: CGVector(dx: 0.1, dy: 0.1)).tap()
         
@@ -52,10 +47,8 @@ final class imageGramUITests: XCTestCase {
         sleep(3)
         let cellLike = tableQuery.children(matching: .cell).element(boundBy: 1)
         cellLike.buttons["likeButton"].tap()
-//        app.buttons["likeButton"].tap()
         sleep(3)
         cellLike.buttons["likeButton"].tap()
-//        app.buttons["likeButton"].tap()
         sleep(3)
         cellLike.tap()
         sleep(4)
@@ -64,15 +57,12 @@ final class imageGramUITests: XCTestCase {
         image.pinch(withScale: 0.5, velocity: -1)
         let buttonBack = app.buttons["backButton"]
         buttonBack.tap()
-//        app.buttons.firstMatch.tap()
     }
     
     func testProfile() throws {
         let table = app.tables
         sleep(3)
         app.tabBars.buttons.element(boundBy: 1).tap()
-//        let image = app.images.children(matching: .image).element(boundBy: 0)
-//        XCTAssertTrue(image.exists)
         sleep(2)
         XCTAssertTrue(app.staticTexts["nameLabel"].exists)
         XCTAssertTrue(app.staticTexts["loginName"].exists)

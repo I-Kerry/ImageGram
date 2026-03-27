@@ -1,6 +1,12 @@
 
 import UIKit
-final class ImagesListService {
+protocol ImagesListServiceProtocol {
+    var photos: [Photo] { get set }
+    func fetchPhotosNextPage()
+    func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void)
+}
+
+final class ImagesListService: ImagesListServiceProtocol {
     
     static let shared = ImagesListService()
     private init() {}
@@ -10,7 +16,7 @@ final class ImagesListService {
     private var lastLoadedPage: Int?
     private lazy var dateFormatter = ISO8601DateFormatter()
     
-    private(set) var photos: [Photo] = []
+    var photos: [Photo] = []
     
     static let didChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
     

@@ -22,26 +22,11 @@ final class WebViewPresenter: WebViewPresenterProtocol {
     }
     
     func viewDidLoad() {
-//        loadAuthView()
         guard let request = authHelper.authRequest() else { return }
         view?.load(request: request)
         
         didUpdateProgressValue(0)
     }
-    
-//    private func loadAuthView() {
-//        guard var urlComponents = URLComponents(string: WebViewCOnstants.unsplashAuthorizeURLString) else { return }
-//        urlComponents.queryItems = [
-//            URLQueryItem(name: "client_id", value: Constants.accessKey),
-//            URLQueryItem(name: "redirect_uri", value: Constants.redirectURI),
-//            URLQueryItem(name: "response_type", value: "code"),
-//            URLQueryItem(name: "scope", value: Constants.accessScope)
-//        ]
-//        guard let url = urlComponents.url else { return }
-//        
-//        let request = URLRequest(url: url)
-//        view?.load(request: request)
-//    }
     
     func didUpdateProgressValue(_ newValue: Double) {
         let newProgressValue = Float(newValue)
@@ -57,15 +42,5 @@ final class WebViewPresenter: WebViewPresenterProtocol {
     
     func code(from url: URL) -> String? {
         authHelper.code(from: url)
-//        if
-//            let urlComponents = URLComponents(string: url.absoluteString),
-//            urlComponents.path == "/oauth/authorize/native",
-//            let items = urlComponents.queryItems,
-//            let codeitem = items.first(where: { $0.name == "code" })
-//        {
-//            return codeitem.value
-//        } else {
-//            return nil
-//        }
     }
 }

@@ -11,14 +11,18 @@ protocol ImageListPresenterProtocol: AnyObject {
 }
 
 final class ImageListPresenter: ImageListPresenterProtocol {
+    
+    private let service: ImagesListServiceProtocol
     var view: ImagesListViewControllerProtocol?
     var photos: [Photo] = []
     
+    init(service: ImagesListServiceProtocol = ImagesListService.shared) {
+        self.service = service
+    }
+    
     func viewDidLoad() {
-        
         setupNotification()
-        ImagesListService.shared.fetchPhotosNextPage()
-        updateTableViewAnimated()
+        service.fetchPhotosNextPage()
     }
     
     func setupNotification() {
@@ -34,16 +38,16 @@ final class ImageListPresenter: ImageListPresenterProtocol {
     func updateTableViewAnimated() {
         
         let oldCount = photos.count
-        let newCount = ImagesListService.shared.photos.count
+        let newCount = service.photos.count
         
-        photos = ImagesListService.shared.photos
+        photos = service.photos
         
         view?.updateTableViewAnimated(oldCount: oldCount, newCount: newCount)
     }
     
     func fetchNextPage() {
-        if photos.count == ImagesListService.shared.photos.count {
-            ImagesListService.shared.fetchPhotosNextPage()
+        if photos.count == service.photos.count {
+            service.fetchPhotosNextPage()
         }
     }
     
@@ -51,14 +55,12 @@ final class ImageListPresenter: ImageListPresenterProtocol {
         let photo = photos[indexPath.row]
         
         UIBlockingProgressHUD.show()
-        ImagesListService.shared.changeLike(photoId: photo.id, isLike: photo.isLiked) { result in
+        service.changeLike(photoId: photo.id, isLike: photo.isLiked) {
+            result in
             switch result {
             case .success:
-//                self.photos = ImagesListService.shared.photos
-                self.photos = ImagesListService.shared.photos
-//                cell.setIsLiked(self.presenter?.photos[indexPath.row].isLiked)
+                self.photos = self.service.photos
                 let isLiked = self.photos[indexPath.row].isLiked
-//                view.cell.setIsLiked(isLiked)
                 self.view?.updateLike(at: indexPath, isLiked: isLiked)
                 
                 UIBlockingProgressHUD.dismiss()
