@@ -1,9 +1,17 @@
 import UIKit
 import Kingfisher
 
-final class ProfileViewController: UIViewController {
-    
-    private var profileImageServiceObserver: NSObjectProtocol?
+public protocol ProfileViewControllerProtocol: AnyObject {
+    var presenter: ProfileViewPresenterProtocol? { get set }
+    func updateAvatar(url: URL)
+    func updateProfile(name: String, lName: String, bio: String?)
+}
+
+final class ProfileViewController: UIViewController & ProfileViewControllerProtocol {
+    var presenter: ProfileViewPresenterProtocol?
+    private var profileImageService: ProfileImageServiceProtocol? = ProfileImageService.shared
+
+    //    private var profileImageServiceObserver: NSObjectProtocol?
     
     private var imageView: UIImageView!
     private var nameLabel: UILabel!
@@ -11,7 +19,7 @@ final class ProfileViewController: UIViewController {
     private var discription: UILabel!
     private var logoutButton: UIButton!
     
-    private var profileService = ProfileService.shared
+//    private var profileService = ProfileService.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,24 +30,33 @@ final class ProfileViewController: UIViewController {
         setupDiscription()
         setupLogoutButton()
         setupConstraints()
+        logoutButton.accessibilityIdentifier = "logoutButton"
         
         view.backgroundColor = .ypBlack
         
-        profileImageServiceObserver = NotificationCenter.default.addObserver(
-            forName: ProfileImageService.didChangeNotification,
-            object: nil,
-            queue: .main) { [weak self ] _ in
-                guard let self else { return }
-                self.updateAvatar()
-            }
+        let presenter = ProfileViewPresenter(profileService: ProfileService.shared, profileImageService: profileImageService ?? ProfileImageService.shared)
         
-        updateAvatar()
+        configure(presenter)
         
-        if let profile = profileService.profile {
-            updateProfile(profile: profile)
-            ProfileImageService.shared.fetchProfileImageURL(username: profile.username) { _ in
-            }
-        }
+        presenter.viewDidload()
+
+//        let presenter = ProfileViewPresenter(profileService: ProfileService.shared, profileImageService: profileImageService)
+ 
+//        profileImageServiceObserver = NotificationCenter.default.addObserver(
+//            forName: ProfileImageService.didChangeNotification,
+//            object: nil,
+//            queue: .main) { [weak self ] _ in
+//                guard let self else { return }
+//                self.updateAvatar()
+//            }
+        
+//        updateAvatar()
+        
+//        if let profile = profileService.profile {
+//            updateProfile(profile: profile)
+//            ProfileImageService.shared.fetchProfileImageURL(username: profile.username) { _ in
+//            }
+//        }
     }
     
     @objc
@@ -65,6 +82,7 @@ final class ProfileViewController: UIViewController {
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.font = UIFont.systemFont(ofSize: 23, weight: .semibold)
         nameLabel.textColor = .white
+        nameLabel.accessibilityIdentifier = "nameLabel"
     }
     
     private func setupLoginName() {
@@ -74,6 +92,7 @@ final class ProfileViewController: UIViewController {
         loginName.translatesAutoresizingMaskIntoConstraints = false
         loginName.textColor = .ypGrayLoginName
         loginName.font = UIFont.systemFont(ofSize: 13)
+        loginName.accessibilityIdentifier = "loginName"
     }
     
     private func setupDiscription() {
@@ -83,6 +102,7 @@ final class ProfileViewController: UIViewController {
         discription.translatesAutoresizingMaskIntoConstraints = false
         discription.textColor = .white
         discription.font = UIFont.systemFont(ofSize: 13)
+        discription.accessibilityIdentifier = "discription"
     }
     
     private func setupLogoutButton() {
@@ -113,23 +133,18 @@ final class ProfileViewController: UIViewController {
         ])
     }
     
-    private func updateProfile(profile: Profile) {
-        nameLabel.text = profile.name.isEmpty ? "Uknown" : profile.name
-        loginName.text = profile.loginName.isEmpty ? "@Uknown" : profile.loginName
-        discription.text = profile.bio?.isEmpty != nil ? profile.bio : "There is nothing yet"
+    func updateProfile(name: String, lName: String, bio: String?) {
+        nameLabel.text = name.isEmpty ? "Uknown" : name
+        loginName.text = lName.isEmpty ? "@Uknown" : lName
+        discription.text = bio?.isEmpty == false ? bio : "There is nothing yet"
     }
     
-    private func updateAvatar() {
-        guard
-            let profileImageURL = ProfileImageService.shared.avatarURL,
-            let imageUrl = URL(string: profileImageURL)
-        else { return }
-        
+    func updateAvatar(url: URL) {
         lazy var placeholder = MagicConstants.personInCircle?.withTintColor(.lightGray, renderingMode: .alwaysOriginal).withConfiguration(UIImage.SymbolConfiguration(pointSize: 70, weight: .regular, scale: .large))
         
         let processor = RoundCornerImageProcessor(cornerRadius: 35)
         imageView.kf.indicatorType = .activity
-        imageView.kf.setImage(with: imageUrl, placeholder: placeholder, options: [.processor(processor), .scaleFactor(UIScreen.main.scale), .cacheOriginalImage, .forceRefresh]) { result in
+        imageView.kf.setImage(with: url, placeholder: placeholder, options: [.processor(processor), .scaleFactor(UIScreen.main.scale), .cacheOriginalImage, .forceRefresh]) { result in
             switch result {
             case .success(let value):
                 print(value.image)
@@ -140,6 +155,11 @@ final class ProfileViewController: UIViewController {
             }
         }
     }
+    
+    func configure(_ presenter: ProfileViewPresenterProtocol) {
+        self.presenter = presenter
+        presenter.view = self
+    }
 }
 
 extension ProfileViewController {
@@ -147,16 +167,12 @@ extension ProfileViewController {
         let alert = UIAlertController(title: "Bye, bye", message: "Are you sure you want to leave?", preferredStyle: .alert)
         let alertAction1 = UIAlertAction(title: "No", style: .default) { _ in
         return }
-        let alertAction2 = UIAlertAction(title: "Yes", style: .default) { _ in
-            ProfileLogoutService.shared.logout()
-            guard let window = UIApplication.shared.windows.first else { return }
-            let splashVc = SplashViewController()
-            window.rootViewController = splashVc
-            window.makeKeyAndVisible()
+        let alertAction2 = UIAlertAction(title: "Yes", style: .default) { [weak self] _ in
+            guard let self else { return }
+            presenter?.logout()
         }
         alert.addAction(alertAction2)
         alert.addAction(alertAction1)
-        
         present(alert, animated: true)
     }
 }

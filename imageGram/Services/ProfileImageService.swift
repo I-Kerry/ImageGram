@@ -1,6 +1,11 @@
 
 import Foundation
 
+protocol ProfileImageServiceProtocol {
+    var avatarURL: String? { get }
+    func fetchProfileImageURL(username: String, _ completion: @escaping (Result<String, Error>) -> Void)
+}
+
 struct ProfileImage: Codable {
     let small: String
     let medium: String
@@ -21,7 +26,7 @@ struct UserResult: Codable {
     }
 }
 
-final class ProfileImageService {
+final class ProfileImageService: ProfileImageServiceProtocol {
     static let shared = ProfileImageService()
     private init() { }
     private(set) var avatarURL: String?
