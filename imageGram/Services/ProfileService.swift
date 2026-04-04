@@ -2,6 +2,11 @@
 
 import Foundation
 
+protocol ProfileServiceProtocol {
+    var profile: Profile? { get set }
+    func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void)
+}
+
 struct Profile {
     let username: String
     let name: String
@@ -23,13 +28,13 @@ struct ProfileResult: Codable {
     }
 }
 
-final class ProfileService {
+final class ProfileService: ProfileServiceProtocol {
     
     static let shared = ProfileService()
     private var task: URLSessionTask?
     private var urlSession = URLSession.shared
     private init() {}
-    private(set) var profile: Profile?
+    var profile: Profile?
     
     
     func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
